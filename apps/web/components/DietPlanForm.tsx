@@ -3,8 +3,12 @@
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createDietPlanRefinedSchema } from 'shared';
-import type { Condition, AgeGroup, MealType } from 'shared';
 import { z } from 'zod';
+
+// Define enum values for UI
+const CONDITIONS = ['DIABETES', 'CARDIAC', 'GENERAL', 'CHILD'] as const;
+const AGE_GROUPS = ['TWO_TO_FIVE', 'SIX_TO_TEN'] as const;
+const MEAL_TYPES = ['BREAKFAST', 'LUNCH', 'DINNER', 'SNACK'] as const;
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import apiFetch from '@/lib/api';
@@ -76,11 +80,11 @@ export function DietPlanForm({ plan }: DietPlanFormProps) {
           {errors.titleBn && <p className="text-red-500 text-sm">{errors.titleBn.message}</p>}
         </div>
         <Controller control={control} name="condition" render={({ field }) => (
-          <div><Label>Condition</Label><Select onValueChange={field.onChange} defaultValue={field.value}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{Object.values(Condition).map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent></Select>{errors.condition && <p className="text-red-500 text-sm">{errors.condition.message}</p>}</div>
+          <div><Label>Condition</Label><Select onValueChange={field.onChange} defaultValue={field.value}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{CONDITIONS.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent></Select>{errors.condition && <p className="text-red-500 text-sm">{errors.condition.message}</p>}</div>
         )} />
         {watchedCondition === 'CHILD' && (
           <Controller control={control} name="ageGroup" render={({ field }) => (
-            <div><Label>Age Group</Label><Select onValueChange={field.onChange} defaultValue={field.value || undefined}><SelectTrigger><SelectValue placeholder="Select age group" /></SelectTrigger><SelectContent>{Object.values(AgeGroup).map(ag => <SelectItem key={ag} value={ag}>{ag}</SelectItem>)}</SelectContent></Select>{errors.ageGroup && <p className="text-red-500 text-sm">{errors.ageGroup.message}</p>}</div>
+            <div><Label>Age Group</Label><Select onValueChange={field.onChange} defaultValue={field.value || undefined}><SelectTrigger><SelectValue placeholder="Select age group" /></SelectTrigger><SelectContent>{AGE_GROUPS.map(ag => <SelectItem key={ag} value={ag}>{ag}</SelectItem>)}</SelectContent></Select>{errors.ageGroup && <p className="text-red-500 text-sm">{errors.ageGroup.message}</p>}</div>
           )} />
         )}
       </div>
@@ -92,7 +96,7 @@ export function DietPlanForm({ plan }: DietPlanFormProps) {
             <Button type="button" variant="destructive" size="sm" className="absolute top-2 right-2" onClick={() => remove(index)}>Remove</Button>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Controller control={control} name={`meals.${index}.mealType`} render={({ field }) => (
-                <div><Label>Meal Type</Label><Select onValueChange={field.onChange} defaultValue={field.value}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{Object.values(MealType).map(mt => <SelectItem key={mt} value={mt}>{mt}</SelectItem>)}</SelectContent></Select></div>
+                <div><Label>Meal Type</Label><Select onValueChange={field.onChange} defaultValue={field.value}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{MEAL_TYPES.map(mt => <SelectItem key={mt} value={mt}>{mt}</SelectItem>)}</SelectContent></Select></div>
               )} />
               <div>
                 <Label>Order</Label>

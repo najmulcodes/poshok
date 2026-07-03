@@ -2,7 +2,8 @@
 
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createDietPlanRefinedSchema, Condition, AgeGroup, MealType } from 'shared';
+import { createDietPlanRefinedSchema } from 'shared';
+import type { Condition, AgeGroup, MealType } from 'shared';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
@@ -45,6 +46,7 @@ export function DietPlanForm({ plan }: DietPlanFormProps) {
   const watchedCondition = watch('condition');
 
   const onSubmit = async (data: FormValues) => {
+    if (!token) return;
     try {
       const payload = { ...data, ageGroup: data.ageGroup === null ? undefined : data.ageGroup };
       if (plan) {

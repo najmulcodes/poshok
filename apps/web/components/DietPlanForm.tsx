@@ -3,6 +3,7 @@
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createDietPlanRefinedSchema } from 'shared';
+import type { Condition, AgeGroup, MealType } from 'shared';
 import { z } from 'zod';
 
 // Define enum values for UI

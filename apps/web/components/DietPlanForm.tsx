@@ -118,7 +118,7 @@ export function DietPlanForm({ plan }: DietPlanFormProps) {
             </div>
           </div>
         ))}
-        <Button type="button" variant="outline" onClick={() => append({ mealType: MealType.SNACK, order: fields.length + 1, descriptionEn: '', descriptionBn: '' })}>Add Meal</Button>
+        <Button type="button" variant="outline" onClick={() => append({ mealType: 'SNACK', order: fields.length + 1, descriptionEn: '', descriptionBn: '' })}>Add Meal</Button>
       </div>
 
       <Button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Saving...' : 'Save Plan'}</Button>

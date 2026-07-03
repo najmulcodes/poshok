@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, ActivityIndicator, Alert, ScrollView, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams, useRouter, useNavigation } from 'expo-router';
-import apiFetch from '@/services/api';
-import { useAuth } from '@/hooks/useAuth';
-import { useTranslation } from '@/constants/i18n';
+import apiFetch from '@/lib/api';
+import { useAuth } from '@/lib/auth/useAuth';
+import { useTranslation } from '@/lib/i18n';
 import { FontAwesome } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
+import { getCommonStyles } from '@/constants/styles';
 
 interface Meal {
   id: string;
@@ -29,6 +31,8 @@ export default function PlanDetailsScreen() {
   const navigation = useNavigation();
   const { refetchUser } = useAuth();
   const { t } = useTranslation();
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
 
   const [plan, setPlan] = useState<DietPlanDetails | null>(null);
   const [loading, setLoading] = useState(true);
@@ -118,7 +122,7 @@ export default function PlanDetailsScreen() {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
       <Text style={styles.title}>{plan.titleEn}</Text>
       <Text style={styles.subtitle}>{plan.titleBn}</Text>
 
@@ -149,17 +153,26 @@ export default function PlanDetailsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  container: { flex: 1, backgroundColor: '#fff' },
-  title: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', paddingHorizontal: 16, paddingTop: 16 },
-  subtitle: { fontSize: 18, textAlign: 'center', color: '#6c757d', paddingBottom: 16 },
-  mealsContainer: { paddingHorizontal: 16 },
-  mealCard: { backgroundColor: '#f8f9fa', borderRadius: 8, padding: 16, marginBottom: 12 },
-  mealType: { fontSize: 16, fontWeight: 'bold', textTransform: 'capitalize', marginBottom: 8 },
-  mealDescriptionBn: { color: '#495057', fontStyle: 'italic', marginTop: 4 },
-  calories: { marginTop: 8, color: '#28a745', fontWeight: '500' },
-  buttonWrapper: { margin: 16 },
-  disclaimerContainer: { padding: 16, alignItems: 'center' },
-  disclaimerText: { fontSize: 12, color: '#6c757d', textAlign: 'center' },
-});
+const getStyles = (colors: any) => {
+  const commonStyles = getCommonStyles(colors);
+  return StyleSheet.create({
+    ...commonStyles,
+    title: { ...commonStyles.title, textAlign: 'center', paddingHorizontal: 16, paddingTop: 16, marginBottom: 0 },
+    subtitle: { fontSize: 18, textAlign: 'center', color: colors.subtext, paddingBottom: 16 },
+    mealsContainer: { paddingHorizontal: 16 },
+    mealCard: {
+      backgroundColor: colors.background,
+      borderRadius: 8,
+      padding: 16,
+      marginBottom: 12,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    mealType: { fontSize: 16, fontWeight: 'bold', textTransform: 'capitalize', marginBottom: 8, color: colors.text },
+    mealDescriptionBn: { color: colors.subtext, fontStyle: 'italic', marginTop: 4 },
+    calories: { marginTop: 8, color: '#28a745', fontWeight: '500' },
+    buttonWrapper: { margin: 16 },
+    disclaimerContainer: { padding: 16, alignItems: 'center' },
+    disclaimerText: { fontSize: 12, color: colors.subtext, textAlign: 'center' },
+  });
+};

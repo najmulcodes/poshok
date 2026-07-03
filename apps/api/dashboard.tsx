@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Button, Alert } from 'react-native';
-import { useAuth } from '@/hooks/useAuth';
-import { useTranslation } from '@/constants/i18n';
+import { useAuth } from '@/lib/auth/useAuth';
+import { useTranslation } from '@/lib/i18n';
 import { useRouter } from 'expo-router';
 import { MealCard } from '@/components/diet/MealCard';
-import apiFetch from '@/services/api';
+import apiFetch from '@/lib/api';
+import { useTheme } from '@/hooks/useTheme';
+import { getCommonStyles } from '@/constants/styles';
 
 export default function DashboardScreen() {
   const { user, loading } = useAuth();
@@ -41,6 +43,8 @@ export default function DashboardScreen() {
 
   const activeSubscription = user?.subscriptions?.[0];
   const plan = activeSubscription?.dietPlan;
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
 
   const NoPlanView = () => (
     <View style={styles.centered}>
@@ -51,7 +55,7 @@ export default function DashboardScreen() {
   );
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={!plan ? styles.centeredContent : {}}>
+    <ScrollView style={styles.container} contentContainerStyle={!plan ? styles.centered : {}}>
       <Text style={styles.title}>Welcome, {user?.email}</Text>
       {plan ? (
         <View>
@@ -78,45 +82,53 @@ export default function DashboardScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: '#f8f9fa' },
-  centeredContent: { flexGrow: 1, justifyContent: 'center', alignItems: 'center' },
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 16 },
-  title: { fontSize: 22, fontWeight: 'bold', marginBottom: 24, color: '#343a40' },
-  planTitle: { fontSize: 18, fontWeight: '600', marginBottom: 8, color: '#495057' },
-  planCard: {
-    backgroundColor: '#e9ecef',
-    padding: 20,
-    borderRadius: 8,
-    marginBottom: 24,
-  },
-  planName: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  planNameBn: {
-    fontSize: 18,
-    textAlign: 'center',
-    color: '#495057',
-    marginTop: 4,
-  },
-  mealsHeader: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 16,
-    color: '#495057',
-  },
-  noPlanText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#6c757d',
-    marginBottom: 8,
-  },
-  noPlanSubText: {
-    fontSize: 16,
-    color: '#6c757d',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-});
+const getStyles = (colors: any) => {
+  const commonStyles = getCommonStyles(colors);
+  return StyleSheet.create({
+    ...commonStyles,
+    title: {
+      ...commonStyles.title,
+      fontSize: 22,
+      marginBottom: 24,
+    },
+    planTitle: { fontSize: 18, fontWeight: '600', marginBottom: 8, color: colors.subtext },
+    planCard: {
+      backgroundColor: colors.card,
+      padding: 20,
+      borderRadius: 8,
+      marginBottom: 24,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    planName: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      color: colors.text,
+    },
+    planNameBn: {
+      fontSize: 18,
+      textAlign: 'center',
+      color: colors.subtext,
+      marginTop: 4,
+    },
+    mealsHeader: {
+      fontSize: 18,
+      fontWeight: '600',
+      marginBottom: 16,
+      color: colors.subtext,
+    },
+    noPlanText: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: colors.subtext,
+      marginBottom: 8,
+    },
+    noPlanSubText: {
+      fontSize: 16,
+      color: colors.subtext,
+      textAlign: 'center',
+      marginBottom: 20,
+    },
+  });
+};

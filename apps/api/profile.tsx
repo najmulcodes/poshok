@@ -9,6 +9,7 @@ import { useTranslation } from '@/constants/i18n';
 import { useRouter } from 'expo-router';
 import apiFetch from '@/services/api';
 import { healthProfileSchema, ConditionEnum, AgeGroupEnum, LanguageEnum } from 'shared';
+import { getCommonStyles } from '@/constants/styles';
 import { z } from 'zod';
 
 const profileFormSchema = healthProfileSchema.extend({
@@ -179,12 +180,11 @@ export default function ProfileScreen() {
   );
 }
 
-const getStyles = (colors: any) => StyleSheet.create({
-    container: {
-      flex: 1,
-      padding: 16,
-    },
-    title: { fontSize: 24, fontWeight: 'bold', marginBottom: 24, color: colors.text },
+const getStyles = (colors: any) => {
+  const commonStyles = getCommonStyles(colors);
+  return StyleSheet.create({
+    ...commonStyles,
+    title: { ...commonStyles.title, marginBottom: 24 },
     label: { fontSize: 16, fontWeight: '500', color: colors.text, marginBottom: 8 },
     pickerContainer: {
       borderWidth: 1,
@@ -223,3 +223,4 @@ const getStyles = (colors: any) => StyleSheet.create({
       fontWeight: 'bold',
     },
   });
+};

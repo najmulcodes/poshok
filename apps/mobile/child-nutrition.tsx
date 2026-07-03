@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Alert, TextInput } from 'react-native';
 import { Link } from 'expo-router';
-import apiFetch from '@/lib/api';
-import { useTranslation } from '@/lib/i18n';
+import apiFetch from '@/services/api';
+import { useTranslation } from '@/constants/i18n';
+import { useTheme } from '@/hooks/useTheme';
+import { getCommonStyles } from '@/constants/styles';
 
 interface DietPlanSummary {
   id: string;
@@ -13,6 +15,8 @@ interface DietPlanSummary {
 
 export default function ChildNutritionScreen() {
   const { t } = useTranslation();
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
   const [plans, setPlans] = useState<DietPlanSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -75,30 +79,30 @@ export default function ChildNutritionScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: '#f8f9fa' },
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
-  searchInput: {
-    height: 40,
-    borderColor: '#ced4da',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    marginBottom: 20,
-    backgroundColor: '#fff',
-  },
-  planItem: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 8,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
-  },
-  planTitle: { fontSize: 18, fontWeight: '600' },
-  ageGroup: { fontSize: 14, color: '#6c757d', marginTop: 4, textTransform: 'capitalize' }
-});
+const getStyles = (colors: any) => {
+  const commonStyles = getCommonStyles(colors);
+  return StyleSheet.create({
+    ...commonStyles,
+    searchInput: {
+      height: 40,
+      borderColor: colors.border,
+      borderWidth: 1,
+      borderRadius: 8,
+      paddingHorizontal: 10,
+      marginBottom: 20,
+      backgroundColor: colors.card,
+      color: colors.text,
+    },
+    planItem: {
+      ...commonStyles.card,
+      padding: 20,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.2,
+      shadowRadius: 1.41,
+      elevation: 2,
+    },
+    planTitle: { fontSize: 18, fontWeight: '600', color: colors.text },
+    ageGroup: { fontSize: 14, color: colors.subtext, marginTop: 4, textTransform: 'capitalize' }
+  });
+};

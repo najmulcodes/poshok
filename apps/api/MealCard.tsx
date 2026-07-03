@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Meal } from 'shared';
 import { FontAwesome } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 
 interface MealCardProps {
   meal: Meal;
@@ -10,6 +11,8 @@ interface MealCardProps {
 }
 
 export const MealCard = ({ meal, isCompleted, onToggleCompletion }: MealCardProps) => {
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
   return (
     <View style={styles.card}>
       <View style={styles.header}>
@@ -29,44 +32,41 @@ export const MealCard = ({ meal, isCompleted, onToggleCompletion }: MealCardProp
   );
 };
 
-const styles = StyleSheet.create({
-    card: {
-        backgroundColor: '#fff',
-        borderRadius: 8,
-        padding: 16,
-        marginBottom: 12,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.18,
-        shadowRadius: 1.00,
-        elevation: 1,
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 8,
-    },
-    mealType: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        textTransform: 'capitalize',
-        color: '#343a40',
-    },
-    description: {
-        fontSize: 14,
-        color: '#495057',
-    },
-    descriptionBn: {
-        fontSize: 14,
-        color: '#495057',
-        fontStyle: 'italic',
-        marginTop: 4,
-    },
-    calories: {
-        marginTop: 8,
-        fontSize: 12,
-        color: '#28a745',
-        fontWeight: '500',
-    },
+const getStyles = (colors: any) => StyleSheet.create({
+  card: {
+      backgroundColor: colors.card,
+      borderRadius: 8,
+      padding: 16,
+      marginBottom: 12,
+      borderWidth: 1,
+      borderColor: colors.border,
+  },
+  header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 8,
+  },
+  mealType: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      textTransform: 'capitalize',
+      color: colors.text,
+  },
+  description: {
+      fontSize: 14,
+      color: colors.subtext,
+  },
+  descriptionBn: {
+      fontSize: 14,
+      color: colors.subtext,
+      fontStyle: 'italic',
+      marginTop: 4,
+  },
+  calories: {
+      marginTop: 8,
+      fontSize: 12,
+      color: '#28a745',
+      fontWeight: '500',
+  },
 });

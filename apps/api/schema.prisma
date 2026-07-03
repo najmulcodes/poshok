@@ -1,0 +1,127 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String
+  role          Role     @default(USER)
+  createdAt     DateTime @default(now())
+  healthProfile HealthProfile?
+  subscriptions PlanSubscription[]
+  notifications Notification[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model HealthProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+  condition   Condition
+  ageGroup    AgeGroup?
+  language    Language  @default(BN)
+  updatedAt   DateTime  @updatedAt
+}
+
+enum Condition {
+  DIABETES
+  CARDIAC
+  GENERAL
+  CHILD
+}
+
+enum AgeGroup {
+  TWO_TO_FIVE
+  SIX_TO_TEN
+}
+
+enum Language {
+  EN
+  BN
+}
+
+model DietPlan {
+  id            String   @id @default(cuid())
+  condition     Condition
+  ageGroup      AgeGroup?
+  titleEn       String
+  titleBn       String
+  version       Int      @default(1)
+  isPublished   Boolean  @default(false)
+  createdById   String
+  createdAt     DateTime @default(now())
+  meals         Meal[]
+  subscriptions PlanSubscription[]
+
+  @@index([condition, ageGroup, isPublished])
+}
+
+model Meal {
+  id          String   @id @default(cuid())
+  dietPlanId  String
+  dietPlan    DietPlan @relation(fields: [dietPlanId], references: [id])
+  mealType    MealType
+  descriptionEn String
+  descriptionBn String
+  calories    Int?
+  order       Int
+}
+
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+  SNACK
+}
+
+model PlanSubscription {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  dietPlanId  String
+  dietPlan    DietPlan @relation(fields: [dietPlanId], references: [id])
+  subscribedAt DateTime @default(now())
+
+  @@unique([userId, dietPlanId])
+}
+
+model Notification {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  type        NotificationType
+  channel     NotificationChannel
+  status      NotificationStatus @default(PENDING)
+  scheduledAt DateTime
+  sentAt      DateTime?
+  createdAt   DateTime @default(now())
+
+  @@index([status, scheduledAt])
+}
+
+enum NotificationType {
+  MEAL_REMINDER
+  PLAN_UPDATED
+}
+
+enum NotificationChannel {
+  PUSH
+  IN_APP
+  EMAIL
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+}

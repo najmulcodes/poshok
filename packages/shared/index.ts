@@ -1,2 +1,7 @@
-// This package will contain shared code like Zod schemas, TS types, and translations.
-export {};
+import { Role } from '@prisma/client';
+
+export interface JwtPayload {
+  userId: string;
+  role: Role;
+  // iat, exp are automatically added by jsonwebtoken
+}

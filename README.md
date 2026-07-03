@@ -27,3 +27,53 @@ This phase scaffolds the monorepo, sets up the database schema, and seeds it wit
 4.  **Seed the Database**: After migration, run `npm run db:seed` from `c:\poshok\apps\api` to populate the database with an admin user and sample diet plans.
 
 After these steps, the database will be ready for the next phase of development.
+
+## Phase 2: Auth End-to-End
+
+This phase implements the complete authentication and authorization system for the API.
+
+### New Environment Variables
+
+The following variables must be added to your `.env` file in `apps/api`:
+
+```
+# You can generate these with: node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+JWT_SECRET="your-super-secret-key"
+JWT_REFRESH_SECRET="your-super-secret-refresh-key"
+
+ACCESS_TOKEN_EXPIRES_IN="15m"
+REFRESH_TOKEN_EXPIRES_IN="7d"
+PORT=3001
+```
+
+### Running the API Server
+
+1.  Navigate to the API directory: `cd apps/api`
+2.  Run the development server: `npm run dev`
+
+The API will be running on `http://localhost:3001`.
+
+### Testing with cURL
+
+You can test the new auth endpoints using a tool like cURL or Postman.
+
+**Register a new user:**
+```bash
+curl -X POST http://localhost:3001/api/v1/auth/register -H "Content-Type: application/json" -d '{"email":"test@example.com", "password":"password123"}'
+```
+
+**Login:**
+```bash
+curl -X POST http://localhost:3001/api/v1/auth/login -H "Content-Type: application/json" -d '{"email":"test@example.com", "password":"password123"}' -c cookies.txt
+```
+
+**Get user profile (requires auth):**
+```bash
+# Replace YOUR_ACCESS_TOKEN with the token from the login response
+curl http://localhost:3001/api/v1/users/me -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+```
+
+**Refresh token:**
+```bash
+curl -X POST http://localhost:3001/api/v1/auth/refresh -b cookies.txt
+```

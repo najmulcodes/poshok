@@ -2,9 +2,8 @@
 
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createDietPlanRefinedSchema } from 'shared';
+import { createDietPlanRefinedSchema, Condition, AgeGroup, MealType } from 'shared';
 import { z } from 'zod';
-import { DietPlan, Meal, Condition, AgeGroup, MealType } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import apiFetch from '@/lib/api';
@@ -14,10 +13,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-type DietPlanWithMeals = DietPlan & { meals: Meal[] };
-
 type DietPlanFormProps = {
-  plan?: DietPlanWithMeals;
+  plan?: any; // API response type
 };
 
 const formSchema = createDietPlanRefinedSchema;
@@ -34,9 +31,9 @@ export function DietPlanForm({ plan }: DietPlanFormProps) {
     } : {
       titleEn: '',
       titleBn: '',
-      condition: Condition.GENERAL,
+      condition: 'GENERAL' as Condition,
       ageGroup: null,
-      meals: [{ mealType: MealType.BREAKFAST, order: 1, descriptionEn: '', descriptionBn: '' }],
+      meals: [{ mealType: 'BREAKFAST' as MealType, order: 1, descriptionEn: '', descriptionBn: '' }],
     },
   });
 

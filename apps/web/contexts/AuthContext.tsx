@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useState, useEffect, ReactNode, useMemo } from 'react';
-import { Role } from '@prisma/client';
+import { Role } from 'shared';
 import apiFetch from '@/lib/api';
 
 interface User {
@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
-  const isAdmin = useMemo(() => user?.role === Role.ADMIN, [user]);
+  const isAdmin = useMemo(() => user?.role === 'ADMIN', [user]);
 
   const value = { user, token, login, logout, loading, isAdmin };
 

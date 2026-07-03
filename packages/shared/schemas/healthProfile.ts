@@ -1,10 +1,10 @@
 import { z } from 'zod';
-import { Condition, AgeGroup, Language } from '@prisma/client';
+import { ConditionEnum, AgeGroupEnum, LanguageEnum } from '../enums';
 
 export const healthProfileSchema = z.object({
-  condition: z.nativeEnum(Condition),
-  ageGroup: z.nativeEnum(AgeGroup).optional().nullable(),
-  language: z.nativeEnum(Language).default('BN'),
+  condition: ConditionEnum,
+  ageGroup: AgeGroupEnum.optional().nullable(),
+  language: LanguageEnum.default('BN'),
 }).refine(
   (data) => data.condition !== 'CHILD' || (data.condition === 'CHILD' && !!data.ageGroup),
   {

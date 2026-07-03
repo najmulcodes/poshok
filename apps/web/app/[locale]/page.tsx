@@ -5,16 +5,13 @@ import { useParams } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import apiFetch from '@/lib/api';
 import { DietPlanForm } from '@/components/DietPlanForm';
-import { DietPlan, Meal } from '@prisma/client';
-
-type DietPlanWithMeals = DietPlan & { meals: Meal[] };
 
 export default function EditDietPlanPage() {
   const { token } = useAuth();
   const params = useParams();
   const id = params.id as string;
 
-  const [plan, setPlan] = useState<DietPlanWithMeals | null>(null);
+  const [plan, setPlan] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

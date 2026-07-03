@@ -1,8 +1,8 @@
 import { z } from 'zod';
-import { Condition, AgeGroup, MealType } from '@prisma/client';
+import { ConditionEnum, AgeGroupEnum, MealTypeEnum } from '../enums';
 
 export const mealSchema = z.object({
-  mealType: z.nativeEnum(MealType),
+  mealType: MealTypeEnum,
   descriptionEn: z.string().min(1, 'English description is required.'),
   descriptionBn: z.string().min(1, 'Bangla description is required.'),
   calories: z.number().int().positive().optional(),
@@ -12,22 +12,22 @@ export const mealSchema = z.object({
 export const createDietPlanSchema = z.object({
   titleEn: z.string().min(1, 'English title is required.'),
   titleBn: z.string().min(1, 'Bangla title is required.'),
-  condition: z.nativeEnum(Condition),
-  ageGroup: z.nativeEnum(AgeGroup).optional().nullable(),
+  condition: ConditionEnum,
+  ageGroup: AgeGroupEnum.optional().nullable(),
   meals: z.array(mealSchema).min(1, 'At least one meal is required.'),
 });
 
 export const updateDietPlanSchema = z.object({
   titleEn: z.string().min(1, 'English title is required.').optional(),
   titleBn: z.string().min(1, 'Bangla title is required.').optional(),
-  condition: z.nativeEnum(Condition).optional(),
-  ageGroup: z.nativeEnum(AgeGroup).optional().nullable(),
+  condition: ConditionEnum.optional(),
+  ageGroup: AgeGroupEnum.optional().nullable(),
   meals: z.array(mealSchema).min(1, 'At least one meal is required.').optional(),
 });
 
 export const listDietPlansQuerySchema = z.object({
-  condition: z.nativeEnum(Condition).optional(),
-  ageGroup: z.nativeEnum(AgeGroup).optional(),
+  condition: ConditionEnum.optional(),
+  ageGroup: AgeGroupEnum.optional(),
   q: z.string().optional(), // Add search query parameter
 });
 

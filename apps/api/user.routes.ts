@@ -1,10 +1,16 @@
 import { Router } from 'express';
-import { getMe } from '../controllers/user.controller.js';
+import { getMe, updateHealthProfile, saveExpoPushToken } from '../controllers/user.controller.js';
 import { protect } from '../middlewares/auth.js';
+import { validate } from '../middlewares/validate.js';
+import { healthProfileSchema } from 'shared';
 
 const router = Router();
 
-// This route is protected, meaning a user must be logged in to access it.
-router.get('/me', protect, getMe);
+// All user routes are protected
+router.use(protect);
+
+router.get('/me', getMe);
+router.patch('/me/health-profile', validate(healthProfileSchema), updateHealthProfile);
+router.post('/me/push-token', saveExpoPushToken);
 
 export default router;

@@ -1,0 +1,31 @@
+{
+  "AdminLogin": {
+    "title": "Admin Login",
+    "emailLabel": "Email Address",
+    "passwordLabel": "Password",
+    "loginButton": "Login",
+    "loginFailed": "Login failed. Please check your credentials."
+  },
+  "Mobile": {
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "childNutrition": "Child Nutrition",
+    "loginTitle": "Welcome Back!",
+    "loginButton": "Login",
+    "noPlan": "No diet plan selected."
+  },
+  "LandingPage": {
+    "heroTitle": "Personalized Nutrition, Simplified.",
+    "heroSubtitle": "Get daily diet plans tailored to your health needs. From diabetes management to child nutrition, Poshok is your guide to a healthier life.",
+    "getStarted": "Get Started",
+    "featuresTitle": "Everything You Need for a Healthier Diet",
+    "feature1Title": "Condition-Specific Plans",
+    "feature1Description": "Choose from plans for diabetes, cardiac health, general wellness, and child nutrition, all created by experts.",
+    "feature2Title": "Bilingual Support",
+    "feature2Description": "Use the app in either Bangla or English for a comfortable and intuitive experience.",
+    "feature3Title": "Daily Reminders",
+    "feature3Description": "Never miss a meal with scheduled push notifications that keep you on track with your health goals.",
+    "footerText": "© 2026 Poshok. All rights reserved.",
+    "footerDisclaimer": "Disclaimer: Poshok provides nutritional suggestions and is not a substitute for professional medical advice. Always consult with a doctor or registered dietitian."
+  }
+}

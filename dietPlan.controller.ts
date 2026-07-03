@@ -5,6 +5,50 @@ import { listDietPlansQuerySchema } from 'shared';
 
 // === ADMIN CONTROLLERS ===
 
+export const getAllDietPlans = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const dietPlans = await prisma.dietPlan.findMany({
+      select: {
+        id: true,
+        condition: true,
+        ageGroup: true,
+        titleEn: true,
+        titleBn: true,
+        version: true,
+        isPublished: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+    res.status(200).json(dietPlans);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getDietPlanByIdAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    const dietPlan = await prisma.dietPlan.findUnique({
+      where: { id },
+      include: {
+        meals: {
+          orderBy: {
+            order: 'asc',
+          },
+        },
+      },
+    });
+
+    if (!dietPlan) {
+      return res.status(404).json({ message: 'Diet plan not found' });
+    }
+
+    res.status(200).json(dietPlan);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const createDietPlan = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { meals, ...planData } = req.body;

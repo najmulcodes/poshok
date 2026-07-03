@@ -1,0 +1,64 @@
+databases:
+  - name: poshok-db
+    databaseName: poshok
+    user: poshok_user
+    plan: free
+
+services:
+  - type: redis
+    name: poshok-redis
+    plan: free
+    maxmemoryPolicy: allkeys-lru # Recommended for BullMQ
+
+  - type: web
+    name: poshok-api
+    env: node
+    plan: free
+    buildCommand: "npm install && npm run build"
+    startCommand: "npm run start"
+    rootDir: "apps/api"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: poshok-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: poshok-redis
+          property: connectionString
+      - fromGroup: poshok-secrets
+
+  - type: worker
+    name: poshok-worker
+    env: node
+    plan: free
+    buildCommand: "npm install"
+    startCommand: "npm run worker"
+    rootDir: "apps/api"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: poshok-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: poshok-redis
+          property: connectionString
+      - fromGroup: poshok-secrets
+
+cron:
+  - label: Dispatch Notifications
+    schedule: "* * * * *" # Every minute
+    command: "curl -X POST -H \"Authorization: Bearer ${INTERNAL_CRON_SECRET}\" https://${RENDER_EXTERNAL_URL}/api/v1/internal/dispatch-notifications"
+
+envVarGroups:
+  - name: poshok-secrets
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: INTERNAL_CRON_SECRET
+        generateValue: true

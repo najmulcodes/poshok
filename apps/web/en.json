@@ -1,0 +1,9 @@
+{
+  "AdminLogin": {
+    "title": "Admin Login",
+    "emailLabel": "Email Address",
+    "passwordLabel": "Password",
+    "loginButton": "Login",
+    "loginFailed": "Login failed. Please check your credentials."
+  }
+}

@@ -13,9 +13,13 @@ export const config = {
     refreshTokenExpiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || '7d',
   },
   isProduction: process.env.NODE_ENV === 'production',
+  redis: {
+    url: process.env.REDIS_URL!,
+  },
+  internalCronSecret: process.env.INTERNAL_CRON_SECRET!,
 };
 
-if (!config.jwt.secret || !config.jwt.refreshSecret) {
-  console.error('FATAL ERROR: JWT secrets are not defined in .env file.');
+if (!config.jwt.secret || !config.jwt.refreshSecret || !config.redis.url || !config.internalCronSecret) {
+  console.error('FATAL ERROR: One or more required environment variables are not defined: JWT_SECRET, JWT_REFRESH_SECRET, REDIS_URL, INTERNAL_CRON_SECRET');
   process.exit(1);
 }

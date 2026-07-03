@@ -75,5 +75,14 @@ curl http://localhost:3001/api/v1/users/me -H "Authorization: Bearer YOUR_ACCESS
 
 **Refresh token:**
 ```bash
+## Phase 7: Web App (Landing Page)
+
+This phase implements the public-facing marketing and landing page for the Poshok web application.
+
+### How to View
+
+1.  Ensure the web app is running (`cd apps/web` and `npm run dev`).
+2.  Navigate to `http://localhost:3000/bn` or `http://localhost:3000/en` in your browser to see the new landing page.
+
 curl -X POST http://localhost:3001/api/v1/auth/refresh -b cookies.txt
 ```

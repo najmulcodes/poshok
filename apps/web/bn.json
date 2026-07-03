@@ -1,0 +1,9 @@
+{
+  "AdminLogin": {
+    "title": "অ্যাডমিন লগইন",
+    "emailLabel": "ইমেল ঠিকানা",
+    "passwordLabel": "পাসওয়ার্ড",
+    "loginButton": "লগইন করুন",
+    "loginFailed": "লগইন ব্যর্থ হয়েছে। আপনার তথ্য চেক করুন।"
+  }
+}

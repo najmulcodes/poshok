@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { JwtPayload } from 'shared';
-import { config } from '../../../config.js';
+import { config } from './config/config.js';
 
-export const REFRESH_TOKEN_COOKIE_NAME = 'poshok_refresh_token';
+export const REFRESH_TOKEN_COOKIE_NAME = 'nevo_refresh_token';
 
 export const generateTokens = (payload: JwtPayload) => {
   const accessToken = jwt.sign(payload, config.jwt.secret, {

@@ -1,9 +1,9 @@
 <div align="center">
-  <h1>Poshok (পোষক) - Health & Diet Chart Platform</h1>
+  <h1>Nevo - Health & Diet Chart Platform</h1>
   <p>
     <strong>A production-grade, full-stack, bilingual (Bangla & English) diet chart platform.</strong>
   </p>
-  <p>Poshok provides users with daily nutrition plans based on declared health conditions and includes a dedicated section for child nutrition. It is designed as a complete ecosystem, including a mobile app, a web-based admin panel, and a backend API.</p>
+  <p>Nevo provides users with daily nutrition plans based on declared health conditions and includes a dedicated section for child nutrition. It is designed as a complete ecosystem, including a mobile app, a web-based admin panel, and a backend API.</p>
 </div>
 
 ---
@@ -32,7 +32,7 @@
 
 ## 🚀 Getting Started: Local Development
 
-This guide will walk you through setting up the entire Poshok platform on your local machine.
+This guide will walk you through setting up the entire Nevo platform on your local machine.
 
 ### Prerequisites
 
@@ -47,8 +47,8 @@ This guide will walk you through setting up the entire Poshok platform on your l
 First, clone the repository and install all dependencies from the root directory.
 
 ```bash
-git clone https://github.com/your-username/poshok.git
-cd poshok
+git clone https://github.com/your-username/nevo.git
+cd nevo
 npm install
 ```
 

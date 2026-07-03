@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { rateLimit } from 'express-rate-limit';
 import { register, login, refresh, logout } from '../controllers/auth.controller.js';
-import { validate } from '../middlewares/validate.js';
+import { validate } from '../middleware/validate.js';
 import { registerSchema, loginSchema } from 'shared';
 
 const router = Router();

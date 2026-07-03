@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { Prisma } from '@prisma/client';
-import prisma from '../../../lib/prisma.js';
-import { notificationQueue } from '../../../lib/queue.js';
+import prisma from '../lib/prisma.js';
+import { notificationQueue } from '../services/queue.js';
 
 export const dispatchNotifications = async (req: Request, res: Response, next: NextFunction) => {
   try {

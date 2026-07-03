@@ -1,5 +1,5 @@
 import { Queue } from 'bullmq';
-import { config } from '../config.js';
+import { config } from '../config/config.js';
 
 export const NOTIFICATION_QUEUE_NAME = 'notifications';
 

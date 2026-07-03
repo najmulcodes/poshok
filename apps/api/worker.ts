@@ -1,7 +1,7 @@
 import { Worker } from 'bullmq';
-import { config } from './config.js';
+import { config } from './config/config.js';
 import prisma from './lib/prisma.js';
-import { NOTIFICATION_QUEUE_NAME } from './lib/queue.js';
+import { NOTIFICATION_QUEUE_NAME } from './services/queue.js';
 
 console.log('Worker process started.');
 
@@ -60,7 +60,7 @@ const worker = new Worker(
       const success = await sendExpoPushNotification(
         notification.user.expoPushToken,
         `Time for ${notification.mealType?.toLowerCase() || 'your meal'}!`,
-        `It's time to have your ${notification.mealType?.toLowerCase() || 'meal'}. Open Poshok to see the details.`
+        `It's time to have your ${notification.mealType?.toLowerCase() || 'meal'}. Open Nevo to see the details.`
       );
 
       await prisma.notification.update({

@@ -1,6 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
 
-const TOKEN_KEY = 'poshok_access_token';
+const TOKEN_KEY = 'nevo_access_token';
 
 export async function getToken(): Promise<string | null> {
   return await SecureStore.getItemAsync(TOKEN_KEY);

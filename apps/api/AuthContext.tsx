@@ -64,12 +64,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     });
-    localStorage.setItem('nevo_token', accessToken);
+    localStorage.setItem('poshok_token', accessToken);
     setToken(accessToken);
   };
 
   const logout = () => {
-    localStorage.removeItem('nevo_token');
+    localStorage.removeItem('poshok_token');
     setToken(null);
     setUser(null);
   };

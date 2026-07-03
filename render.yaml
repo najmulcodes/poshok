@@ -1,17 +1,17 @@
 databases:
-  - name: poshok-db
-    databaseName: poshok
-    user: poshok_user
+  - name: nevo-db
+    databaseName: nevo
+    user: nevo_user
     plan: free
 
 services:
   - type: redis
-    name: poshok-redis
+    name: nevo-redis
     plan: free
     maxmemoryPolicy: allkeys-lru # Recommended for BullMQ
 
   - type: web
-    name: poshok-api
+    name: nevo-api
     env: node
     plan: free
     buildCommand: "npm install && npm run build"
@@ -20,17 +20,17 @@ services:
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: poshok-db
+          name: nevo-db
           property: connectionString
       - key: REDIS_URL
         fromService:
           type: redis
-          name: poshok-redis
+          name: nevo-redis
           property: connectionString
-      - fromGroup: poshok-secrets
+      - fromGroup: nevo-secrets
 
   - type: worker
-    name: poshok-worker
+    name: nevo-worker
     env: node
     plan: free
     buildCommand: "npm install && npm run build"
@@ -39,14 +39,14 @@ services:
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: poshok-db
+          name: nevo-db
           property: connectionString
       - key: REDIS_URL
         fromService:
           type: redis
-          name: poshok-redis
+          name: nevo-redis
           property: connectionString
-      - fromGroup: poshok-secrets
+      - fromGroup: nevo-secrets
 
 cron:
   - label: Dispatch Notifications
@@ -54,7 +54,7 @@ cron:
     command: "curl -X POST -H \"Authorization: Bearer ${INTERNAL_CRON_SECRET}\" https://${RENDER_EXTERNAL_URL}/api/v1/internal/dispatch-notifications"
 
 envVarGroups:
-  - name: poshok-secrets
+  - name: nevo-secrets
     envVars:
       - key: JWT_SECRET
         generateValue: true

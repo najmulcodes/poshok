@@ -30,7 +30,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           <div className="flex justify-between h-16">
             <div className="flex">
               <div className="flex-shrink-0 flex items-center">
-                <span className="font-bold text-xl">Poshok Admin</span>
+              <span className="font-bold text-xl">Nevo Admin</span>
               </div>
             </div>
             {/* Add logout button or user menu here */}

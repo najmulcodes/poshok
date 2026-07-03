@@ -13,12 +13,12 @@
     "preview": {
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://poshok-api.onrender.com/api/v1"
+        "EXPO_PUBLIC_API_URL": "https://nevo-api.onrender.com/api/v1"
       }
     },
     "production": {
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://poshok-api.onrender.com/api/v1"
+        "EXPO_PUBLIC_API_URL": "https://nevo-api.onrender.com/api/v1"
       }
     }
   },

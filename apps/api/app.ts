@@ -1,9 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import { config } from './config.js';
-import v1Router from './api/v1/routes/index.js';
-import { errorHandler } from './api/v1/middlewares/error.js';
+import { config } from './config/config.js';
+import v1Router from './routes/index.js';
+import { errorHandler } from './middleware/error.js';
 
 // Load environment variables
 config;
@@ -21,7 +21,7 @@ app.use(cookieParser());
 
 // API routes
 app.get('/', (req, res) => {
-  res.send('Poshok API is running!');
+  res.send('Nevo API is running!');
 });
 app.use('/api/v1', v1Router);
 

@@ -129,16 +129,45 @@ export const publishDietPlan = async (req: Request, res: Response, next: NextFun
   }
 };
 
+export const toggleFavoritePlan = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id: dietPlanId } = req.params;
+    const userId = req.user!.userId;
+
+    const existingFavorite = await prisma.favoriteDietPlan.findUnique({
+      where: { userId_dietPlanId: { userId, dietPlanId } },
+    });
+
+    if (existingFavorite) {
+      await prisma.favoriteDietPlan.delete({ where: { id: existingFavorite.id } });
+      res.status(200).json({ favorited: false });
+    } else {
+      await prisma.favoriteDietPlan.create({ data: { userId, dietPlanId } });
+      res.status(201).json({ favorited: true });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 // === PUBLIC & USER CONTROLLERS ===
 
 export const getPublishedDietPlans = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const query = listDietPlansQuerySchema.parse(req.query);
+    const { q, ...query } = listDietPlansQuerySchema.parse(req.query);
 
     const where: Prisma.DietPlanWhereInput = {
       isPublished: true,
       ...query,
     };
+
+    // If a search query 'q' is provided, add a filter condition.
+    if (q) {
+      where.OR = [
+        { titleEn: { contains: q, mode: 'insensitive' } },
+        { titleBn: { contains: q, mode: 'insensitive' } },
+      ];
+    }
 
     const dietPlans = await prisma.dietPlan.findMany({
       where,
@@ -164,6 +193,7 @@ export const getPublishedDietPlans = async (req: Request, res: Response, next: N
 export const getDietPlanById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
+    const userId = req.user?.userId;
     const dietPlan = await prisma.dietPlan.findFirst({
       where: { id, isPublished: true },
       include: {
@@ -179,7 +209,15 @@ export const getDietPlanById = async (req: Request, res: Response, next: NextFun
       return res.status(404).json({ message: 'Published diet plan not found' });
     }
 
-    res.status(200).json(dietPlan);
+    let isFavorited = false;
+    if (userId) {
+      const favorite = await prisma.favoriteDietPlan.findUnique({
+        where: { userId_dietPlanId: { userId, dietPlanId: id } },
+      });
+      isFavorited = !!favorite;
+    }
+
+    res.status(200).json({ ...dietPlan, isFavorited });
   } catch (error) {
     next(error);
   }
@@ -205,6 +243,51 @@ export const subscribeToPlan = async (req: Request, res: Response, next: NextFun
         dietPlanId,
       },
     });
+
+    // --- Create Meal Reminders for the next 7 days ---
+    const userProfile = await prisma.healthProfile.findUnique({ where: { userId } });
+
+    const defaultTimes = {
+      BREAKFAST: '08:00:00',
+      LUNCH: '13:00:00',
+      DINNER: '20:00:00',
+      SNACK: '16:00:00',
+    };
+
+    const mealTypesInPlan = await prisma.meal.findMany({
+      where: { dietPlanId },
+      select: { mealType: true },
+      distinct: ['mealType']
+    });
+
+    const notificationsToCreate = [];
+    for (let i = 0; i < 7; i++) { // For the next 7 days
+      const day = new Date();
+      day.setDate(day.getDate() + i);
+
+      for (const { mealType } of mealTypesInPlan) {
+        const timePref = userProfile?.[`${mealType.toLowerCase()}Time` as keyof typeof userProfile] as string | undefined;
+        const time = timePref || defaultTimes[mealType];
+        const [hours, minutes] = time.split(':');
+
+        const scheduledAt = new Date(day);
+        scheduledAt.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
+
+        notificationsToCreate.push({
+          userId,
+          type: 'MEAL_REMINDER' as const,
+          channel: 'PUSH' as const,
+          mealType,
+          scheduledAt,
+        });
+      }
+    }
+
+    if (notificationsToCreate.length > 0) {
+      await prisma.notification.createMany({
+        data: notificationsToCreate,
+      });
+    }
 
     res.status(201).json(subscription);
   } catch (error) {

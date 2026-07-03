@@ -1,5 +1,5 @@
-import { createContext, useState, useEffect, ReactNode } from 'react';
-import { Role } from '@prisma/client';
+import { createContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import { Role, HealthProfile } from 'shared';
 import apiFetch from '@/lib/api';
 import * as tokenStorage from './tokenStorage';
 
@@ -7,7 +7,8 @@ interface User {
   id: string;
   email: string;
   role: Role;
-  healthProfile: any; // Replace with actual HealthProfile type
+  healthProfile: HealthProfile | null;
+  mealCompletions: { mealId: string }[];
   subscriptions: any[]; // Replace with actual Subscription type
 }
 
@@ -16,6 +17,7 @@ interface AuthContextType {
   token: string | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  refetchUser: () => Promise<void>;
   loading: boolean;
 }
 
@@ -25,6 +27,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const logout = useCallback(async () => {
+    await tokenStorage.removeToken();
+    setToken(null);
+    setUser(null);
+  }, []);
+
+  const fetchUser = useCallback(async () => {
+    if (!token) return;
+    try {
+      setLoading(true);
+      const userData = await apiFetch('/users/me');
+      setUser(userData);
+    } catch (error) {
+      console.error('Failed to fetch user, logging out.', error);
+      await logout();
+    } finally {
+      setLoading(false);
+    }
+  }, [token, logout]);
 
   useEffect(() => {
     const loadToken = async () => {
@@ -38,23 +60,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (!token) {
-      setUser(null);
-      return;
-    }
-
-    const fetchUser = async () => {
-      try {
-        const userData = await apiFetch('/users/me');
-        setUser(userData);
-      } catch (error) {
-        console.error('Failed to fetch user, logging out.', error);
-        logout();
-      }
-    };
-
     fetchUser();
-  }, [token]);
+  }, [fetchUser]);
 
   const login = async (email: string, password: string) => {
     const { accessToken } = await apiFetch('/auth/login', {
@@ -65,13 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setToken(accessToken);
   };
 
-  const logout = async () => {
-    await tokenStorage.removeToken();
-    setToken(null);
-    setUser(null);
-  };
-
-  const value = { user, token, login, logout, loading };
+  const value = { user, token, login, logout, loading, refetchUser: fetchUser };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

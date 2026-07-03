@@ -12,7 +12,22 @@
     "childNutrition": "Child Nutrition",
     "loginTitle": "Welcome Back!",
     "loginButton": "Login",
-    "noPlan": "No diet plan selected."
+    "noPlan": "No diet plan selected.",
+    "healthProfileTitle": "Health Profile",
+    "conditionLabel": "Primary Health Condition",
+    "ageGroupLabel": "Age Group (for Child)",
+    "languageLabel": "Preferred Language",
+    "saveButton": "Save Changes",
+    "saveSuccess": "Profile updated successfully!",
+    "saveError": "Failed to update profile.",
+    "yourCurrentPlan": "Your Current Plan",
+    "todaysMeals": "Today's Meals",
+    "viewOtherPlans": "Find a plan that's right for you.",
+    "subscribeButton": "Subscribe to this Plan",
+    "subscribeSuccessTitle": "Subscribed!",
+    "subscribeSuccessMessage": "You have successfully subscribed to this plan. You will now see it on your dashboard.",
+    "subscribeErrorTitle": "Subscription Failed",
+    "subscribeErrorMessage": "Could not subscribe to this plan. You may already be subscribed."
   },
   "LandingPage": {
     "heroTitle": "Personalized Nutrition, Simplified.",

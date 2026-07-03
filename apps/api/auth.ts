@@ -26,3 +26,19 @@ export const requireRole = (requiredRole: Role) => (req: Request, res: Response,
   }
   next();
 };
+
+export const optionalAuth = (req: Request, res: Response, next: NextFunction) => {
+  const authHeader = req.headers.authorization;
+
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    const token = authHeader.split(' ')[1];
+    try {
+      const payload = verifyAccessToken(token);
+      req.user = payload;
+    } catch (error) {
+      // Token is invalid or expired, but we don't care.
+      // Proceed without an authenticated user.
+    }
+  }
+  next();
+};

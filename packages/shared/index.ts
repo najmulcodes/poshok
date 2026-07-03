@@ -2,4 +2,5 @@
 export * from './schemas/auth';
 export * from './schemas/dietPlan';
 export * from './schemas/healthProfile';
+export * from './enums';
 export * from './types';

@@ -59,8 +59,8 @@ const worker = new Worker(
     if (notification.channel === 'PUSH') {
       const success = await sendExpoPushNotification(
         notification.user.expoPushToken,
-        'Poshok Reminder', // Title should be dynamic later
-        'Time for your meal!' // Body should be dynamic later
+        `Time for ${notification.mealType?.toLowerCase() || 'your meal'}!`,
+        `It's time to have your ${notification.mealType?.toLowerCase() || 'meal'}. Open Poshok to see the details.`
       );
 
       await prisma.notification.update({

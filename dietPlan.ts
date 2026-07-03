@@ -28,6 +28,7 @@ export const updateDietPlanSchema = z.object({
 export const listDietPlansQuerySchema = z.object({
   condition: z.nativeEnum(Condition).optional(),
   ageGroup: z.nativeEnum(AgeGroup).optional(),
+  q: z.string().optional(), // Add search query parameter
 });
 
 // Ensure that if condition is CHILD, ageGroup is provided.

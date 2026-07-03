@@ -1,46 +1,72 @@
-import { useEffect } from 'react';
-import { Redirect, Tabs } from 'expo-router';
-import { useAuth } from '@/lib/auth/useAuth';
-import { useTranslation } from '@/lib/i18n';
-import { FontAwesome } from '@expo/vector-icons';
-import { registerForPushNotificationsAsync, savePushToken } from '@/lib/notifications/push';
+import { useEffect, useRef } from 'react';
+import { useFonts } from 'expo-font';
+import { SplashScreen, Stack } from 'expo-router';
+import { AuthProvider } from '@/lib/auth/AuthContext';
+import { ThemeProvider } from '@/lib/theme/ThemeContext';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import * as Notifications from 'expo-notifications';
+import type { Subscription } from 'expo-notifications';
 
-export default function TabLayout() {
-  const { token, loading } = useAuth();
-  const { t } = useTranslation();
+// Prevent the splash screen from auto-hiding before asset loading is complete.
+SplashScreen.preventAutoHideAsync();
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
+export default function RootLayout() {
+  const [loaded, error] = useFonts({
+    'SpaceMono': require('../assets/fonts/SpaceMono-Regular.ttf'),
+  });
 
   useEffect(() => {
-    if (token) {
-      // Register for push notifications after user is logged in
-      registerForPushNotificationsAsync().then(pushToken => {
-        if (pushToken) {
-          savePushToken(pushToken);
-        }
-      });
-    }
-  }, [token]);
+    if (error) throw error;
+  }, [error]);
 
-  if (!loading && !token) {
-    // User is not signed in, redirect to the login screen.
-    return <Redirect href="/(auth)/login" />;
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
+
+  const notificationListener = useRef<Subscription>();
+  const responseListener = useRef<Subscription>();
+
+  useEffect(() => {
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      console.log('Notification received:', notification);
+    });
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log('Notification response received:', response);
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current!);
+      Notifications.removeNotificationSubscription(responseListener.current!);
+    };
+  }, []);
+
+  if (!loaded) {
+    return null;
   }
 
   return (
-    <Tabs screenOptions={{
-      // tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-    }}>
-      <Tabs.Screen
-        name="dashboard"
-        options={{ title: t('Mobile.dashboard'), tabBarIcon: ({ color }) => <FontAwesome name="home" size={28} color={color} /> }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{ title: t('Mobile.profile'), tabBarIcon: ({ color }) => <FontAwesome name="user" size={28} color={color} /> }}
-      />
-      <Tabs.Screen
-        name="child-nutrition"
-        options={{ title: t('Mobile.childNutrition'), tabBarIcon: ({ color }) => <FontAwesome name="child" size={28} color={color} /> }}
-      />
-    </Tabs>
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="plans" options={{ headerShown: false }} />
+            <Stack.Screen name="favorites" options={{ presentation: 'modal' }} />
+          </Stack>
+        </AuthProvider>
+      </ThemeProvider>
+    </SafeAreaProvider>
   );
 }

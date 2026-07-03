@@ -7,10 +7,8 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="col-span-1">
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-br from-emerald-400 to-teal-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">N</span>
-              </div>
+            <div className="flex items-center space-x-3 mb-4">
+              <img src="/favicon.svg" alt="Nevo Logo" className="w-10 h-10" />
               <span className="text-xl font-bold text-white">Nevo</span>
             </div>
             <p className="text-slate-400 text-sm mb-4">

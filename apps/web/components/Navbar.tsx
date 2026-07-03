@@ -12,10 +12,8 @@ export function Navbar() {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href={`/${locale}`} className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-emerald-400 to-teal-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">N</span>
-            </div>
+          <Link href={`/${locale}`} className="flex items-center space-x-3">
+            <img src="/favicon.svg" alt="Nevo Logo" className="w-10 h-10" />
             <span className="text-xl font-bold text-white">Nevo</span>
           </Link>
 

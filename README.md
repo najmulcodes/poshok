@@ -1,88 +1,141 @@
-# Poshok - Health-Condition Diet Chart App
+# Poshok (পোষক) - Health & Diet Chart Platform
 
-This is a full-stack application for providing diet charts based on health conditions.
+Poshok is a production-grade, full-stack, bilingual (Bangla & English) diet chart platform. It provides users with daily nutrition plans based on declared health conditions (e.g., Diabetes, Cardiac) and includes a dedicated section for child nutrition.
 
-## Phase 1: Initial Setup
+This monorepo contains the three main parts of the Poshok ecosystem:
+- **Mobile App**: The primary user-facing product, built with Expo (React Native).
+- **Web App**: A Next.js app for the public marketing page and the internal admin panel.
+- **API**: A Node.js/Express backend that serves both the mobile and web applications.
 
-This phase scaffolds the monorepo, sets up the database schema, and seeds it with initial data.
+---
+
+## Tech Stack
+
+- **Monorepo**: npm Workspaces
+- **Backend**: Node.js, Express, TypeScript, Prisma, PostgreSQL, BullMQ, Redis
+- **Web App**: Next.js (App Router), TypeScript, Tailwind CSS, `next-intl`
+- **Mobile App**: Expo (React Native), TypeScript, `i18n-js`, Expo Router
+- **Shared**: Zod for validation, shared translation files.
+- **Deployment**: Render (API, Worker, DB, Redis), Vercel (Web), EAS (Mobile).
+
+## Monorepo Structure
+
+```
+poshok/
+├── apps/
+│   ├── api/      # Express backend
+│   ├── mobile/   # Expo (React Native) user app
+│   └── web/      # Next.js marketing + admin app
+├── packages/
+│   └── shared/   # Shared Zod schemas, types, translations
+├── package.json  # Root package.json with workspaces config
+└── render.yaml   # Infrastructure-as-Code for Render
+```
+
+## Local Development Setup
 
 ### Prerequisites
 
-- Node.js (v18 or higher)
-- npm
-- PostgreSQL database
+- **Node.js**: v18 or higher
+- **npm**: v8 or higher
+- **PostgreSQL**: A running instance (e.g., via Docker or a local installation)
+- **Redis**: A running instance (e.g., via Docker or a local installation)
+- **Windows Users**: Enable "Developer Mode" or run your terminal as an Administrator to allow `npm install` to create symlinks for workspaces.
 
-### Setup Instructions
+### 1. Root Setup
 
-1.  **Install Dependencies**: Run `npm install` from the root directory (`c:\poshok`).
-    > **Windows Users**: npm workspaces use symlinks. You must either enable "Developer Mode" in Windows settings or run your terminal as an Administrator for `npm install` to succeed.
+Clone the repository and install all dependencies from the root directory.
 
-2.  **Configure Database**: Navigate to `c:\poshok\apps\api`, create a `.env` file, and add your PostgreSQL connection string:
-    ```
-    DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public"
-    ```
-
-3.  **Run Database Migrations**: From the `c:\poshok\apps\api` directory, run `npm run db:migrate`. This will apply the Prisma schema to your database.
-
-4.  **Seed the Database**: After migration, run `npm run db:seed` from `c:\poshok\apps\api` to populate the database with an admin user and sample diet plans.
-
-After these steps, the database will be ready for the next phase of development.
-
-## Phase 2: Auth End-to-End
-
-This phase implements the complete authentication and authorization system for the API.
-
-### New Environment Variables
-
-The following variables must be added to your `.env` file in `apps/api`:
-
-```
-# You can generate these with: node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-JWT_SECRET="your-super-secret-key"
-JWT_REFRESH_SECRET="your-super-secret-refresh-key"
-
-ACCESS_TOKEN_EXPIRES_IN="15m"
-REFRESH_TOKEN_EXPIRES_IN="7d"
-PORT=3001
+```bash
+npm install
 ```
 
-### Running the API Server
+### 2. Backend API (`apps/api`)
 
 1.  Navigate to the API directory: `cd apps/api`
-2.  Run the development server: `npm run dev`
+2.  Create a `.env` file by copying `.env.example`.
+3.  Fill in the environment variables, especially `DATABASE_URL` and `REDIS_URL`.
+4.  Apply database migrations:
+    ```bash
+    npm run db:migrate
+    ```
+5.  Seed the database with an admin user and sample diet plans:
+    ```bash
+    npm run db:seed
+    # Admin credentials: admin@poshok.com / admin-password
+    ```
+6.  In one terminal, start the API server:
+    ```bash
+    npm run dev
+    # API will be running on http://localhost:3001
+    ```
+7.  In a second terminal, start the notification worker:
+    ```bash
+    npm run worker:dev
+    # The worker will connect to Redis and listen for jobs.
+    ```
 
-The API will be running on `http://localhost:3001`.
+### 3. Web App (`apps/web`)
 
-### Testing with cURL
+1.  Navigate to the web app directory: `cd apps/web`
+2.  Create a `.env.local` file.
+3.  Add the API URL:
+    ```
+    NEXT_PUBLIC_API_URL="http://localhost:3001/api/v1"
+    ```
+4.  Start the development server:
+    ```bash
+    npm run dev
+    # Web app will be running on http://localhost:3000
+    ```
+5.  - **Landing Page**: Visit `http://localhost:3000/en` or `http://localhost:3000/bn`.
+    - **Admin Panel**: Visit `http://localhost:3000/en/login` to log in.
 
-You can test the new auth endpoints using a tool like cURL or Postman.
+### 4. Mobile App (`apps/mobile`)
 
-**Register a new user:**
-```bash
-curl -X POST http://localhost:3001/api/v1/auth/register -H "Content-Type: application/json" -d '{"email":"test@example.com", "password":"password123"}'
-```
+1.  Navigate to the mobile app directory: `cd apps/mobile`
+2.  Create a `.env` file.
+3.  Add the API URL. This URL depends on your development environment:
+    - **For Android Emulator**: `EXPO_PUBLIC_API_URL="http://10.0.2.2:3001/api/v1"`
+    - **For iOS Simulator/Physical Device**: Use your computer's local network IP address (e.g., `http://192.168.1.100:3001/api/v1`).
+4.  Start the Expo development server:
+    ```bash
+    npm start
+    ```
+5.  Scan the QR code with the Expo Go app on your physical device, or press `a` or `i` to open it in an Android or iOS simulator.
 
-**Login:**
-```bash
-curl -X POST http://localhost:3001/api/v1/auth/login -H "Content-Type: application/json" -d '{"email":"test@example.com", "password":"password123"}' -c cookies.txt
-```
+---
 
-**Get user profile (requires auth):**
-```bash
-# Replace YOUR_ACCESS_TOKEN with the token from the login response
-curl http://localhost:3001/api/v1/users/me -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
-```
+## Deployment
 
-**Refresh token:**
-```bash
-## Phase 7: Web App (Landing Page)
+This project is configured for a seamless deployment experience.
 
-This phase implements the public-facing marketing and landing page for the Poshok web application.
+### Backend (Render)
 
-### How to View
+The entire backend infrastructure is defined in the `render.yaml` file. To deploy:
+1.  Create a new "Blueprint" on Render.
+2.  Connect your Git repository.
+3.  Render will automatically detect and parse the `render.yaml` file.
+4.  Create an `envVarGroup` named `poshok-secrets` in the Render dashboard and let Render generate the secret values.
+5.  Click "Apply". Render will provision the PostgreSQL database, Redis instance, API server, and background worker, and set up the cron job.
 
-1.  Ensure the web app is running (`cd apps/web` and `npm run dev`).
-2.  Navigate to `http://localhost:3000/bn` or `http://localhost:3000/en` in your browser to see the new landing page.
+### Web App (Vercel)
 
-curl -X POST http://localhost:3001/api/v1/auth/refresh -b cookies.txt
-```
+1.  Create a new project on [Vercel](https://vercel.com/).
+2.  Connect your Git repository.
+3.  Set the "Root Directory" to `apps/web`.
+4.  Add the following environment variable:
+    - `NEXT_PUBLIC_API_URL`: The URL of your deployed Render API (e.g., `https://poshok-api.onrender.com/api/v1`).
+5.  Deploy.
+
+### Mobile App (EAS)
+
+The mobile app is configured for builds and submissions using Expo Application Services (EAS).
+
+1.  Install the EAS CLI: `npm install -g eas-cli`.
+2.  Log in: `eas login`.
+3.  From the `apps/mobile` directory, run a build:
+    ```bash
+    eas build --profile production --platform android
+    ```
+4.  Once the build is complete, you can download the APK/AAB and submit it to the Google Play Console. The `eas.json` file is pre-configured with the production API URL.

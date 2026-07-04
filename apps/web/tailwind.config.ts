@@ -52,6 +52,25 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Nevo brand tokens — one warm "turmeric" accent carries the
+        // brand; leaf green is a supporting note only, never a second
+        // competing hero color.
+        nevo: {
+          bg: "#0B120E",
+          panel: "#111C15",
+          "panel-2": "#16221A",
+          line: "#243027",
+          ink: "#F4F1E8",
+          "ink-dim": "#AFBBAF",
+          "ink-mute": "#7C8A7D",
+          gold: "#E8A94A",
+          "gold-dim": "#B8853A",
+          leaf: "#4E9A6B",
+        },
+      },
+      fontFamily: {
+        display: ["var(--font-display)"],
+        sans: ["var(--font-sans)"],
       },
       borderRadius: {
         lg: "var(--radius)",

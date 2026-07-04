@@ -52,20 +52,20 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Nevo brand tokens — one warm "turmeric" accent carries the
-        // brand; leaf green is a supporting note only, never a second
-        // competing hero color.
+        // Nevo brand tokens — one confident blue accent carries the brand;
+        // violet is a supporting note used only in the headline gradient,
+        // never as a second competing button color.
         nevo: {
-          bg: "#0B120E",
-          panel: "#111C15",
-          "panel-2": "#16221A",
-          line: "#243027",
-          ink: "#F4F1E8",
-          "ink-dim": "#AFBBAF",
-          "ink-mute": "#7C8A7D",
-          gold: "#E8A94A",
-          "gold-dim": "#B8853A",
-          leaf: "#4E9A6B",
+          bg: "#0A0E16",
+          panel: "#10151F",
+          "panel-2": "#151C29",
+          line: "#232B3A",
+          ink: "#F3F5F9",
+          "ink-dim": "#98A2B8",
+          "ink-mute": "#606B80",
+          accent: "#3B82F6",
+          "accent-dim": "#2563EB",
+          violet: "#8B5CF6",
         },
       },
       fontFamily: {

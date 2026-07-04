@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Fraunces, Manrope } from 'next/font/google';
+import { Space_Grotesk, Manrope } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { Providers } from '@/components/Providers';
@@ -7,13 +7,13 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import './globals.css';
 
-// Fraunces carries the brand voice in headlines — warm, editorial, a little
-// hand-set — while Manrope stays quiet and clear for everything you read in
-// paragraphs, forms, and labels.
-const fraunces = Fraunces({
+// Space Grotesk gives headlines a confident, engineered edge — the same
+// geometric-technical character you'd see across modern dev-tool and
+// SaaS products — while Manrope stays clean and quiet in body copy,
+// forms, and labels.
+const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
-  weight: ['500', '600'],
-  style: ['normal', 'italic'],
+  weight: ['500', '600', '700'],
   variable: '--font-display',
   display: 'swap',
 });
@@ -44,12 +44,12 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={`dark ${fraunces.variable} ${manrope.variable}`}>
+    <html lang={locale} className={`dark ${spaceGrotesk.variable} ${manrope.variable}`}>
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <meta name="theme-color" content="#0B120E" />
+        <meta name="theme-color" content="#0A0E16" />
       </head>
       <body className="bg-nevo-bg text-nevo-ink antialiased font-sans">
         <NextIntlClientProvider messages={messages}>
@@ -58,7 +58,7 @@ export default async function LocaleLayout({
             <main className="min-h-screen">
               {children}
             </main>
-            <Footer />
+            <Footer locale={locale} />
           </Providers>
         </NextIntlClientProvider>
       </body>

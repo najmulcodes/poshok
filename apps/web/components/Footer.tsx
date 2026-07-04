@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { Instagram, Facebook, Linkedin } from 'lucide-react';
 
 const columns = [
   {
@@ -7,8 +6,8 @@ const columns = [
     links: [
       { href: 'features', label: 'Features' },
       { href: 'pricing', label: 'Pricing' },
-      { href: 'diet-plans', label: 'Diet plans' },
-      { href: 'nutrition', label: 'Nutrition tracking' },
+      { href: 'demo', label: 'Demo' },
+      { href: 'login', label: 'Sign in' },
     ],
   },
   {
@@ -16,8 +15,6 @@ const columns = [
     links: [
       { href: 'about', label: 'About us' },
       { href: 'contact', label: 'Contact' },
-      { href: 'blog', label: 'Blog' },
-      { href: 'careers', label: 'Careers' },
     ],
   },
   {
@@ -25,12 +22,11 @@ const columns = [
     links: [
       { href: 'privacy', label: 'Privacy policy' },
       { href: 'terms', label: 'Terms of service' },
-      { href: 'security', label: 'Security' },
     ],
   },
 ];
 
-export function Footer() {
+export function Footer({ locale }: { locale: string }) {
   return (
     <footer className="border-t border-nevo-line bg-nevo-panel">
       <div className="mx-auto max-w-6xl px-6 py-14">
@@ -38,7 +34,7 @@ export function Footer() {
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2.5">
               <img src="/favicon.svg" alt="Nevo" className="h-7 w-7" />
-              <span className="font-display text-lg font-medium text-nevo-ink">Nevo</span>
+              <span className="font-display text-lg font-semibold text-nevo-ink">Nevo</span>
             </div>
             <p className="mt-3 text-sm text-nevo-ink-dim">
               Your family nutrition and wellness platform.
@@ -49,7 +45,7 @@ export function Footer() {
                 href="https://software.navicore.co"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-nevo-gold transition-colors hover:text-nevo-gold-dim"
+                className="text-nevo-accent transition-colors hover:text-nevo-accent-dim"
               >
                 Navicore Software
               </a>
@@ -63,7 +59,7 @@ export function Footer() {
                 {col.links.map((link) => (
                   <li key={link.href}>
                     <Link
-                      href={`/en/${link.href}`}
+                      href={`/${locale}/${link.href}`}
                       className="text-sm text-nevo-ink-dim transition-colors hover:text-nevo-ink"
                     >
                       {link.label}
@@ -75,21 +71,10 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-nevo-line pt-6 md:flex-row">
+        <div className="mt-12 flex items-center justify-center border-t border-nevo-line pt-6">
           <p className="text-xs text-nevo-ink-mute">
             © {new Date().getFullYear()} Nevo. All rights reserved.
           </p>
-          <div className="flex gap-5">
-            <a href="#" aria-label="Instagram" className="text-nevo-ink-mute transition-colors hover:text-nevo-ink">
-              <Instagram className="h-5 w-5" strokeWidth={1.75} />
-            </a>
-            <a href="#" aria-label="Facebook" className="text-nevo-ink-mute transition-colors hover:text-nevo-ink">
-              <Facebook className="h-5 w-5" strokeWidth={1.75} />
-            </a>
-            <a href="#" aria-label="LinkedIn" className="text-nevo-ink-mute transition-colors hover:text-nevo-ink">
-              <Linkedin className="h-5 w-5" strokeWidth={1.75} />
-            </a>
-          </div>
         </div>
       </div>
     </footer>

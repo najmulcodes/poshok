@@ -27,7 +27,25 @@
   }
 
   .dark {
-    /* Add dark mode variables here if needed later */
+    --background: 100 20% 6%;
+    --foreground: 60 22% 94%;
+    --card: 110 18% 9%;
+    --card-foreground: 60 22% 94%;
+    --popover: 110 18% 9%;
+    --popover-foreground: 60 22% 94%;
+    --primary: 36 78% 62%;
+    --primary-foreground: 100 20% 6%;
+    --secondary: 110 15% 12%;
+    --secondary-foreground: 60 22% 94%;
+    --muted: 110 15% 12%;
+    --muted-foreground: 110 8% 62%;
+    --accent: 110 15% 12%;
+    --accent-foreground: 60 22% 94%;
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 60 22% 94%;
+    --border: 110 14% 16%;
+    --input: 110 14% 16%;
+    --ring: 36 78% 62%;
   }
 }
 

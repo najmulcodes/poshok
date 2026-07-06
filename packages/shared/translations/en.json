@@ -1,0 +1,30 @@
+{
+  "LandingPage": {
+    "footerDisclaimer": "Diet plans on Nevo are general guidance, not a substitute for advice from a doctor or registered dietitian."
+  },
+  "Mobile": {
+    "loginTitle": "Welcome back",
+    "loginButton": "Sign in",
+    "healthProfileTitle": "Health profile",
+    "conditionLabel": "Health condition",
+    "ageGroupLabel": "Age group",
+    "languageLabel": "Preferred language",
+    "saveButton": "Save",
+    "saveSuccess": "Your profile has been updated.",
+    "saveError": "Something went wrong while saving. Please try again.",
+    "myFavorites": "My favorites",
+    "noFavorites": "You haven't favorited any plans yet.",
+    "noPlan": "You don't have an active meal plan yet",
+    "viewOtherPlans": "Browse available plans to get started",
+    "childNutrition": "Child nutrition",
+    "yourCurrentPlan": "Your current plan",
+    "todaysMeals": "Today's meals",
+    "subscribeButton": "Subscribe to this plan",
+    "subscribeSuccessTitle": "Subscribed!",
+    "subscribeSuccessMessage": "This plan has been added to your dashboard.",
+    "subscribeErrorTitle": "Couldn't subscribe",
+    "subscribeErrorMessage": "Something went wrong. Please try again.",
+    "toggleFavoriteError": "Couldn't update favorites. Please try again.",
+    "updateStatusError": "Couldn't update meal status. Please try again."
+  }
+}

@@ -5,18 +5,23 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Picker } from '@react-native-picker/picker';
 import { useAuth } from '@/hooks/useAuth';
 import { useTheme } from '@/hooks/useTheme';
-import { useTranslation } from '@/lib/i18n';
+import { useTranslation } from '@/constants/i18n';
 import { useRouter } from 'expo-router';
 import apiFetch from '@/services/api';
-import { healthProfileSchema, ConditionEnum, AgeGroupEnum, LanguageEnum } from 'shared';
+import { healthProfileBaseSchema, ConditionEnum, AgeGroupEnum, LanguageEnum } from 'shared';
 import { z } from 'zod';
 
-const profileFormSchema = healthProfileSchema.extend({
-  breakfastTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format (HH:mm)").optional().nullable(),
-  lunchTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format (HH:mm)").optional().nullable(),
-  dinnerTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format (HH:mm)").optional().nullable(),
-  snackTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format (HH:mm)").optional().nullable(),
-});
+const profileFormSchema = healthProfileBaseSchema
+  .extend({
+    breakfastTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format (HH:mm)").optional().nullable(),
+    lunchTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format (HH:mm)").optional().nullable(),
+    dinnerTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format (HH:mm)").optional().nullable(),
+    snackTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format (HH:mm)").optional().nullable(),
+  })
+  .refine(
+    (data) => data.condition !== 'CHILD' || (data.condition === 'CHILD' && !!data.ageGroup),
+    { message: "ageGroup is required when condition is 'CHILD'", path: ['ageGroup'] }
+  );
 
 type FormValues = z.infer<typeof profileFormSchema>;
 
@@ -156,7 +161,7 @@ export default function ProfileScreen() {
         <Button title={isSubmitting ? 'Saving...' : t('Mobile.saveButton')} onPress={handleSubmit(onSubmit)} disabled={isSubmitting || loading} />
       </View>
 
-      <TouchableOpacity style={styles.favoritesButton} onPress={() => router.push('/favorites/')}>
+      <TouchableOpacity style={styles.favoritesButton} onPress={() => router.push('/favorites')}>
         <Text style={styles.favoritesButtonText}>{t('Mobile.myFavorites')}</Text>
       </TouchableOpacity>
 

@@ -1,4 +1,4 @@
-import * as tokenStorage from './auth/tokenStorage';
+import * as tokenStorage from './tokenStorage';
 
 const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
 
@@ -9,9 +9,9 @@ type FetchOptions = RequestInit & {
 async function apiFetch(endpoint: string, options: FetchOptions = {}) {
   const token = await tokenStorage.getToken();
 
-  const headers: HeadersInit = {
+  const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...options.headers,
+    ...(options.headers as Record<string, string> | undefined),
   };
 
   if (token) {

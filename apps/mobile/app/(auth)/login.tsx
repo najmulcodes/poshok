@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
 import { useAuth } from '@/hooks/useAuth';
-import { useTranslation } from '@/lib/i18n';
+import { useTranslation } from '@/constants/i18n';
 
 export default function LoginScreen() {
   const { login } = useAuth();
   const { t } = useTranslation();
-  const [email, setEmail] = useState('test@example.com');
-  const [password, setPassword] = useState('password123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {

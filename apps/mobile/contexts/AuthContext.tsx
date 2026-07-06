@@ -1,7 +1,28 @@
 import { createContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { Role, HealthProfile } from 'shared';
 import apiFetch from '@/services/api';
-import * as tokenStorage from './tokenStorage';
+import * as tokenStorage from '../services/tokenStorage';
+
+interface SubscribedMeal {
+  id: string;
+  mealType: string;
+  descriptionEn: string;
+  descriptionBn: string;
+  calories?: number;
+  order: number;
+}
+
+interface SubscribedDietPlan {
+  id: string;
+  titleEn: string;
+  titleBn: string;
+  meals: SubscribedMeal[];
+}
+
+interface Subscription {
+  id: string;
+  dietPlan: SubscribedDietPlan;
+}
 
 interface User {
   id: string;
@@ -9,7 +30,7 @@ interface User {
   role: Role;
   healthProfile: HealthProfile | null;
   mealCompletions: { mealId: string }[];
-  subscriptions: any[]; // Replace with actual Subscription type
+  subscriptions: Subscription[];
 }
 
 interface AuthContextType {

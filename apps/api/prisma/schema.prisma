@@ -30,7 +30,7 @@ enum Role {
 model HealthProfile {
   id          String   @id @default(cuid())
   userId      String   @unique
-  user        User     @relation(fields: [userId], references: [id])
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   condition   Condition
   ageGroup    AgeGroup?
   language    Language  @default(BN)
@@ -97,7 +97,7 @@ enum MealType {
 model PlanSubscription {
   id          String   @id @default(cuid())
   userId      String
-  user        User     @relation(fields: [userId], references: [id])
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   dietPlanId  String
   dietPlan    DietPlan @relation(fields: [dietPlanId], references: [id])
   subscribedAt DateTime @default(now())
@@ -108,10 +108,11 @@ model PlanSubscription {
 model Notification {
   id          String   @id @default(cuid())
   userId      String
-  user        User     @relation(fields: [userId], references: [id])
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   type        NotificationType
   channel     NotificationChannel
   status      NotificationStatus @default(PENDING)
+  mealType    MealType?
   scheduledAt DateTime
   sentAt      DateTime?
   createdAt   DateTime @default(now())

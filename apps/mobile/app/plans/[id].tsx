@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Button, ActivityIndicator, Alert, ScrollView, T
 import { useLocalSearchParams, useRouter, useNavigation } from 'expo-router';
 import apiFetch from '@/services/api';
 import { useAuth } from '@/hooks/useAuth';
-import { useTranslation } from '@/lib/i18n';
+import { useTranslation } from '@/constants/i18n';
 import { FontAwesome } from '@expo/vector-icons';
 
 interface Meal {
@@ -92,7 +92,7 @@ export default function PlanDetailsScreen() {
             text: 'OK',
             onPress: async () => {
               await refetchUser();
-              router.replace('/(tabs)/dashboard');
+              router.replace('/dashboard');
             },
           },
         ]

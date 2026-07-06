@@ -1,5 +1,6 @@
 import { PrismaClient, Condition, AgeGroup, MealType, Role } from '@prisma/client';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 
 const prisma = new PrismaClient();
 
@@ -7,19 +8,26 @@ async function main() {
   console.log('Start seeding ...');
 
   const saltRounds = 10;
-  const password = 'admin-password';
+  const adminEmail = process.env.ADMIN_SEED_EMAIL || 'admin@nevocore.app';
+  // Generate a random password by default so no known credential ever ends
+  // up committed to source control. Override with ADMIN_SEED_PASSWORD if
+  // you need a specific value (e.g. for local dev).
+  const password = process.env.ADMIN_SEED_PASSWORD || crypto.randomBytes(12).toString('base64url');
   const passwordHash = await bcrypt.hash(password, saltRounds);
 
   // Create an admin user
   const adminUser = await prisma.user.create({
     data: {
-      email: 'admin@poshok.com',
+      email: adminEmail,
       passwordHash,
       role: Role.ADMIN,
     },
   });
 
-  console.log(`Created admin user with email: admin@poshok.com and password: ${password}`);
+  console.log(`Created admin user: ${adminEmail}`);
+  if (!process.env.ADMIN_SEED_PASSWORD) {
+    console.log(`Generated admin password (save this now, it won't be shown again): ${password}`);
+  }
 
   // Seed Diet Plans
   const dietPlans = [
@@ -91,7 +99,7 @@ async function main() {
       meals: {
         create: [
           { mealType: MealType.BREAKFAST, order: 1, descriptionEn: 'Whole wheat toast with avocado', descriptionBn: 'অ্যাভোকাডো সহ গমের টোস্ট', calories: 320 },
-          { mealType: MealType.LUNCH, order: 2, descriptionEn: 'Chicken and vegetable skewers', descriptionBn: 'চিকেন এবং সবজিরเสียบ', calories: 450 },
+          { mealType: MealType.LUNCH, order: 2, descriptionEn: 'Chicken and vegetable skewers', descriptionBn: 'চিকেন ও সবজির কাবাব', calories: 450 },
           { mealType: MealType.DINNER, order: 3, descriptionEn: 'Pasta with lean ground beef and tomato sauce', descriptionBn: 'টমেটো সস সহ চর্বিহীন গরুর মাংসের কিমা দিয়ে পাস্তা', calories: 550 },
         ],
       },

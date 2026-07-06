@@ -10,8 +10,8 @@ export default function StartPage() {
   }
 
   if (token) {
-    return <Redirect href="/(tabs)/dashboard" />;
+    return <Redirect href="/dashboard" />;
   } else {
-    return <Redirect href="/(auth)/login" />;
+    return <Redirect href="/login" />;
   }
 }

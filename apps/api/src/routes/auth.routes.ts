@@ -14,7 +14,15 @@ const loginLimiter = rateLimit({
   message: 'Too many login attempts, please try again after 15 minutes.',
 });
 
-router.post('/register', validate(registerSchema), register);
+const registerLimiter = rateLimit({
+	windowMs: 60 * 60 * 1000, // 1 hour
+	limit: 10, // Limit each IP to 10 account creations per window
+	standardHeaders: 'draft-7',
+	legacyHeaders: false,
+  message: 'Too many accounts created from this IP, please try again later.',
+});
+
+router.post('/register', registerLimiter, validate(registerSchema), register);
 router.post('/login', loginLimiter, validate(loginSchema), login);
 router.post('/refresh', refresh);
 router.post('/logout', logout);

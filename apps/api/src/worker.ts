@@ -5,13 +5,18 @@ import { NOTIFICATION_QUEUE_NAME } from './services/queue.js';
 
 console.log('Worker process started.');
 
-const sendExpoPushNotification = async (token: string, title: string, body: string) => {
+const sendExpoPushNotification = async (
+  token: string,
+  title: string,
+  body: string,
+  data: Record<string, unknown> = {}
+) => {
   const message = {
     to: token,
     sound: 'default',
     title,
     body,
-    data: { withSome: 'data' },
+    data,
   };
 
   try {
@@ -57,10 +62,13 @@ const worker = new Worker<{ notificationId: string }>(
 
     // For now, we only handle PUSH notifications.
     if (notification.channel === 'PUSH') {
+      const mealLabel = (notification.mealType || 'meal').toLowerCase();
+
       const success = await sendExpoPushNotification(
         notification.user.expoPushToken,
-        `Time for your meal!`,
-        `It's time to have your meal. Open Nevo to see the details.`
+        `Time for ${mealLabel}!`,
+        `It's time for your ${mealLabel}. Open Nevo to see the details.`,
+        { type: notification.type, mealType: notification.mealType }
       );
 
       await prisma.notification.update({

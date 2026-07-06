@@ -1,0 +1,30 @@
+{
+  "LandingPage": {
+    "footerDisclaimer": "Nevo-এর ডায়েট প্ল্যানগুলো সাধারণ নির্দেশনা মাত্র, ডাক্তার বা পুষ্টিবিদের পরামর্শের বিকল্প নয়।"
+  },
+  "Mobile": {
+    "loginTitle": "আবার স্বাগতম",
+    "loginButton": "সাইন ইন করুন",
+    "healthProfileTitle": "স্বাস্থ্য প্রোফাইল",
+    "conditionLabel": "স্বাস্থ্য অবস্থা",
+    "ageGroupLabel": "বয়স গ্রুপ",
+    "languageLabel": "পছন্দের ভাষা",
+    "saveButton": "সংরক্ষণ করুন",
+    "saveSuccess": "আপনার প্রোফাইল আপডেট হয়েছে।",
+    "saveError": "সংরক্ষণ করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।",
+    "myFavorites": "আমার পছন্দ",
+    "noFavorites": "আপনি এখনও কোনো প্ল্যান পছন্দ করেননি।",
+    "noPlan": "আপনার এখনও কোনো চলমান খাবার পরিকল্পনা নেই",
+    "viewOtherPlans": "শুরু করতে উপলব্ধ প্ল্যানগুলো দেখুন",
+    "childNutrition": "শিশু পুষ্টি",
+    "yourCurrentPlan": "আপনার বর্তমান পরিকল্পনা",
+    "todaysMeals": "আজকের খাবার",
+    "subscribeButton": "এই প্ল্যানে সাবস্ক্রাইব করুন",
+    "subscribeSuccessTitle": "সাবস্ক্রাইব হয়েছে!",
+    "subscribeSuccessMessage": "এই প্ল্যানটি আপনার ড্যাশবোর্ডে যোগ করা হয়েছে।",
+    "subscribeErrorTitle": "সাবস্ক্রাইব করা যায়নি",
+    "subscribeErrorMessage": "একটি সমস্যা হয়েছে। আবার চেষ্টা করুন।",
+    "toggleFavoriteError": "পছন্দ আপডেট করা যায়নি। আবার চেষ্টা করুন।",
+    "updateStatusError": "খাবারের অবস্থা আপডেট করা যায়নি। আবার চেষ্টা করুন।"
+  }
+}

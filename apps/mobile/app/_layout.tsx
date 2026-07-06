@@ -1,5 +1,4 @@
-import { useEffect, useRef } from 'react';
-import { useFonts } from 'expo-font';
+import { useEffect, useRef, useState } from 'react';
 import { SplashScreen, Stack } from 'expo-router';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
@@ -7,7 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as Notifications from 'expo-notifications';
 import type { Subscription } from 'expo-notifications';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+// Prevent the splash screen from auto-hiding before the app is ready.
 SplashScreen.preventAutoHideAsync();
 
 Notifications.setNotificationHandler({
@@ -19,19 +18,12 @@ Notifications.setNotificationHandler({
 });
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
-    'SpaceMono': require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (error) throw error;
-  }, [error]);
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
+    setReady(true);
+    SplashScreen.hideAsync();
+  }, []);
 
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
@@ -51,7 +43,7 @@ export default function RootLayout() {
     };
   }, []);
 
-  if (!loaded) {
+  if (!ready) {
     return null;
   }
 
@@ -60,9 +52,10 @@ export default function RootLayout() {
       <ThemeProvider>
         <AuthProvider>
           <Stack>
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen name="plans" options={{ headerShown: false }} />
+            <Stack.Screen name="plans" options={{ title: '' }} />
             <Stack.Screen name="favorites" options={{ presentation: 'modal' }} />
           </Stack>
         </AuthProvider>

@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { config } from './config/config.js';
 import v1Router from './routes/index.js';
@@ -11,8 +12,20 @@ config;
 const app = express();
 
 // Middlewares
+app.use(helmet());
+
+if (config.isProduction && config.corsOrigins.length === 0) {
+  console.error(
+    'WARNING: CORS_ORIGIN is not set in production. Cross-origin requests will be blocked ' +
+    'by default until you set CORS_ORIGIN to a comma-separated list of allowed origins ' +
+    '(e.g. https://nevocore.vercel.app).'
+  );
+}
+
 app.use(cors({
-  origin: true, // Reflects the request origin. Change in production.
+  origin: config.isProduction
+    ? config.corsOrigins // fail closed: only these origins are allowed in production
+    : true, // reflect any origin in local dev for convenience
   credentials: true,
 }));
 app.use(express.json());

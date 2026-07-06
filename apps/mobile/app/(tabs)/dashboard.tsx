@@ -1,21 +1,36 @@
 import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Button, Alert } from 'react-native';
 import { useAuth } from '@/hooks/useAuth';
-import { useTranslation } from '@/lib/i18n';
+import { useTheme } from '@/hooks/useTheme';
+import { useTranslation } from '@/constants/i18n';
 import { useRouter } from 'expo-router';
 import { MealCard } from '@/components/diet/MealCard';
 import apiFetch from '@/services/api';
+import { registerForPushNotificationsAsync, savePushToken } from '@/services/push';
 
 export default function DashboardScreen() {
   const { user, loading } = useAuth();
+  const { colors } = useTheme();
   const { t } = useTranslation();
   const router = useRouter();
+  const styles = getStyles(colors);
   const [completedMeals, setCompletedMeals] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (user?.mealCompletions) {
       setCompletedMeals(new Set(user.mealCompletions.map(c => c.mealId)));
     }
+  }, [user]);
+
+  // Register for push notifications once the user is signed in. This was
+  // built out in services/push.ts but never actually called anywhere.
+  useEffect(() => {
+    if (!user) return;
+    registerForPushNotificationsAsync()
+      .then((token) => {
+        if (token) return savePushToken(token);
+      })
+      .catch((error) => console.error('Push registration failed:', error));
   }, [user]);
 
   const handleToggleCompletion = async (mealId: string) => {
@@ -46,7 +61,7 @@ export default function DashboardScreen() {
     <View style={styles.centered}>
       <Text style={styles.noPlanText}>{t('Mobile.noPlan')}</Text>
       <Text style={styles.noPlanSubText}>{t('Mobile.viewOtherPlans')}</Text>
-      <Button title={t('Mobile.childNutrition')} onPress={() => router.push('/(tabs)/child-nutrition')} />
+      <Button title={t('Mobile.childNutrition')} onPress={() => router.push('/child-nutrition')} />
     </View>
   );
 
@@ -78,45 +93,49 @@ export default function DashboardScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: '#f8f9fa' },
-  centeredContent: { flexGrow: 1, justifyContent: 'center', alignItems: 'center' },
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 16 },
-  title: { fontSize: 22, fontWeight: 'bold', marginBottom: 24, color: '#343a40' },
-  planTitle: { fontSize: 18, fontWeight: '600', marginBottom: 8, color: '#495057' },
-  planCard: {
-    backgroundColor: '#e9ecef',
-    padding: 20,
-    borderRadius: 8,
-    marginBottom: 24,
-  },
-  planName: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  planNameBn: {
-    fontSize: 18,
-    textAlign: 'center',
-    color: '#495057',
-    marginTop: 4,
-  },
-  mealsHeader: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 16,
-    color: '#495057',
-  },
-  noPlanText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#6c757d',
-    marginBottom: 8,
-  },
-  noPlanSubText: {
-    fontSize: 16,
-    color: '#6c757d',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-});
+const getStyles = (colors: any) =>
+  StyleSheet.create({
+    container: { flex: 1, padding: 16, backgroundColor: colors.background },
+    centeredContent: { flexGrow: 1, justifyContent: 'center', alignItems: 'center' },
+    centered: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 16 },
+    title: { fontSize: 22, fontWeight: 'bold', marginBottom: 24, color: colors.text },
+    planTitle: { fontSize: 18, fontWeight: '600', marginBottom: 8, color: colors.text },
+    planCard: {
+      backgroundColor: colors.card,
+      padding: 20,
+      borderRadius: 8,
+      marginBottom: 24,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    planName: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      color: colors.text,
+    },
+    planNameBn: {
+      fontSize: 18,
+      textAlign: 'center',
+      color: colors.subtext,
+      marginTop: 4,
+    },
+    mealsHeader: {
+      fontSize: 18,
+      fontWeight: '600',
+      marginBottom: 16,
+      color: colors.text,
+    },
+    noPlanText: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: colors.subtext,
+      marginBottom: 8,
+    },
+    noPlanSubText: {
+      fontSize: 16,
+      color: colors.subtext,
+      textAlign: 'center',
+      marginBottom: 20,
+    },
+  });

@@ -21,6 +21,10 @@ export const config = {
     url: process.env.REDIS_URL!,
   },
   internalCronSecret: process.env.INTERNAL_CRON_SECRET!,
+  // For free-tier hosts that don't support a separate background-worker
+  // service (e.g. Render's free plan): run the BullMQ worker and the
+  // notification dispatch scheduler inside this same process.
+  runWorkerInProcess: process.env.RUN_WORKER_INPROCESS === 'true',
 };
 
 if (!config.jwt.secret || !config.jwt.refreshSecret || !config.redis.url || !config.internalCronSecret) {

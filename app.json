@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "18968c78-f136-40f5-a4a9-9649a45d1413"
+      }
+    },
+    "android": {
+      "package": "com.najmulcodes.nevo"
+    }
+  }
+}

@@ -22,6 +22,8 @@ services:
     startCommand: "npm run start"
     rootDir: "apps/api"
     envVars:
+      - key: NODE_VERSION
+        value: "22" # pinned explicitly — an open-ended engines range in package.json let Render pick a brand-new, untested major version (26.x) that broke the build in ways 22.x doesn't
       - key: RUN_WORKER_INPROCESS
         value: "true"
       - key: DATABASE_URL

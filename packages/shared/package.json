@@ -5,8 +5,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "node -e \"const p=require.resolve('typescript/package.json');console.log('Using typescript', require(p).version, 'from', p);require('child_process').execFileSync(process.execPath,[require.resolve('typescript/bin/tsc'),'-p','tsconfig.json'],{stdio:'inherit'})\"",
-    "prepare": "npm run build"
+    "build": "tsc -p tsconfig.json",
+    "prepare": "tsc -p tsconfig.json"
   },
   "dependencies": {
     "zod": "^3.23.8"

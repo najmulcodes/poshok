@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "dev:worker": "tsx watch src/worker.ts",
-    "build": "prisma generate && tsc",
+    "build": "npm run build --prefix ../../packages/shared && prisma generate && tsc",
     "start": "node dist/index.js",
     "worker": "node dist/worker.js",
     "postinstall": "prisma generate",

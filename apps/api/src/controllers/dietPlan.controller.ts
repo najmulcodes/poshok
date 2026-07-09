@@ -89,7 +89,7 @@ export const updateDietPlan = async (req: Request, res: Response, next: NextFunc
       return res.status(403).json({ message: 'Cannot update a published plan. Create a new version instead.' });
     }
 
-    const updatedPlan = await prisma.$transaction(async (tx) => {
+    const updatedPlan = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       if (meals && meals.length > 0) {
         // Delete old meals and create new ones
         await tx.meal.deleteMany({ where: { dietPlanId: id } });

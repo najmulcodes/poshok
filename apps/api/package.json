@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "dev:worker": "tsx watch src/worker.ts",
-    "build": "npm run build --prefix ../../packages/shared && npx -y prisma@5.22.0 generate && npx --no-install tsc -p tsconfig.json",
+    "build": "npm run build --prefix ../../packages/shared && npx -y prisma@5.22.0 generate && npx -y -p typescript@5.9.3 tsc -p tsconfig.json",
     "start": "node dist/index.js",
     "worker": "node dist/worker.js",
     "db:migrate": "prisma migrate deploy",

@@ -21,7 +21,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.nevo.app"
+      "package": "com.nevo.app",
+      "googleServicesFile": "./google-services.json"
     },
     "plugins": [
       "expo-router"

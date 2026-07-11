@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "985406386908",
+    "project_id": "nevocoo",
+    "storage_bucket": "nevocoo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:985406386908:android:bd801bd1b885ca47ea3a19",
+        "android_client_info": {
+          "package_name": "com.nevo.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZF_QFPSoRjPi0Hszp5ha4-4vhtyrq8bk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
